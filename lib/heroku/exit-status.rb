@@ -6,8 +6,13 @@ class Heroku::Command::Run < Heroku::Command::Base
   protected
   def run_attached(command)
     command_with_exit = %Q{#{command}; echo heroku-command-exit-status $?}
+
+    app_name = app
+    opts = { :attach => true, :ps_env => get_terminal_environment }
+    opts[:size] = get_size if options[:size]
+
     process_data = action("Running `#{command}` attached to terminal", :success => "up") do
-      process_data = api.post_ps(app, command_with_exit, { :attach => true, :ps_env => get_terminal_environment }).body
+      process_data = api.post_ps(app_name, command_with_exit, opts).body
       status(process_data["process"])
       process_data
     end
