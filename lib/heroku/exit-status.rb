@@ -32,7 +32,7 @@ class Heroku::Client::Rendezvous
       rescue # ignore failed gsub, for instance when non-utf8
       end
     end
-    if data =~ /\Aheroku-command-exit-status ([\d]+)/
+    if data.encode('UTF-16le', :invalid => :replace, :replace => '').encode('UTF-8') =~ /\Aheroku-command-exit-status ([\d]+)/
       exit $1.to_i
     end
     output.isatty ? data : data.gsub(/\cM/,"")
