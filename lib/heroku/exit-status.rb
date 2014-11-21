@@ -9,7 +9,7 @@ class Heroku::Command::Run < Heroku::Command::Base
 
     app_name = app
     opts = { :attach => true, :ps_env => get_terminal_environment }
-    opts[:size] = get_size if options[:size]
+    opts[:size] = options[:size] if options[:size]
 
     process_data = action("Running `#{command}` attached to terminal", :success => "up") do
       process_data = api.post_ps(app_name, command_with_exit, opts).body
